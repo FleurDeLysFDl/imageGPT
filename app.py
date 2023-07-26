@@ -1,7 +1,5 @@
 import replicate
 import os
-from PIL import Image
-import requests
 from flask import Flask,render_template,request
 
 os.environ["REPLICATE_API_TOKEN"]="r8_KGgOCwTJvjWp0hJOUfiAr1SoCTGBWQQ2UahyC" 
@@ -13,10 +11,16 @@ app = Flask(__name__)
 def index():
     if request.method == "POST":
         q = request.form.get("describe")
-        print(q)
-        r = {"prompt":q}
-        re = version.predict(**r)
-        return (render_template("index.html",result=re[0]))
+        body = json.dumps({"version": "db21e45d3f7023abc2a46ee38a23973f6dce16bb082a930b0c49861f96d1e5bf", "input": { "prompt": q } })
+        headers = {'Authorization': 'Token r8_KGgOCwTJvjWp0hJOUfiAr1SoCTGBWQQ2UahyC','Content-Type': 'application/json'}
+        output = requests.post('https://api.replicate.com/v1/predictions',data=body,headers=headers)
+        time.sleep(10)
+        get_url = output.json()['urls']['get']
+        print(get_url)
+        get_result = requests.post(get_url,headers=headers).json()['output']
+        print(get_result)
+        return(render_template("index.html", result=get_result[0]))
+
     else:
         return(render_template("index.html",result="waiting..."))
 
