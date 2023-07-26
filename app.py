@@ -3,6 +3,7 @@ import json
 import time
 import request
 from flask import Flask,render_template,request
+import replicate
 app = Flask(__name__)
 @app.route("/",methods=["GET","POST"])
 def index():
