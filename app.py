@@ -1,7 +1,7 @@
 import os
 import json
 import time
-import request
+import requests
 from flask import Flask,render_template,request
 import replicate
 app = Flask(__name__)
